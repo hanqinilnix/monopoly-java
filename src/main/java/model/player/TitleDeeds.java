@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 import commons.ColorGroup;
 import model.spaces.Property;
@@ -18,7 +19,7 @@ public class TitleDeeds {
     private int numOfStations = 0;
     private int numOfUtilities = 0;
     private Map<ColorGroup, Integer> propertyPerColorGroup = new HashMap<>();
-    private int[] housePerPropertyPerColorGroup = new int[8];
+    private Map<ColorGroup, SortedSet<Integer>> housePerPropertyPerColorGroup = new HashMap<>();
 
     public void addDeed(PurchasableSpace newDeed) {
         if (newDeed instanceof Utility) {
@@ -28,13 +29,19 @@ public class TitleDeeds {
         } else {
             Property deed = (Property) newDeed;
             ColorGroup group = deed.getColorGroup();
-            int numOfProperty = propertyPerColorGroup.get(group);
+            int numOfProperty = 0;
+            if (propertyPerColorGroup.containsKey(group)) {
+                numOfProperty = propertyPerColorGroup.get(group);
+            }
             propertyPerColorGroup.replace(group, numOfProperty + 1);
         }
         deeds.add(newDeed);
     }
 
     public boolean hasCompleteColorGroup(ColorGroup group) {
+        if (propertyPerColorGroup.containsKey(group)) {
+            return false;
+        }
         int numOfProperties = propertyPerColorGroup.get(group);
 
         if (group == ColorGroup.PURPLE || group == ColorGroup.BLUE) {
@@ -43,8 +50,21 @@ public class TitleDeeds {
         return numOfProperties == 3;
     }
 
-    public void buyHouse(PurchasableSpace propertyToBuyHouse) {
+    public boolean canBuildEvenly(Property propertyToBuyHouse) {
+        ColorGroup group = propertyToBuyHouse.getColorGroup();
+        if (!hasCompleteColorGroup(group)) {
+            return false;
+        }
 
+        SortedSet<Integer> housesSet = housePerPropertyPerColorGroup.get(group);
+        assert housesSet.size() <= 2;
+
+        if (housesSet.size() == 2) {
+            int numOfHouses = propertyToBuyHouse.getNumOfHouses();
+            return housesSet.first() == numOfHouses;
+        }
+
+        return true;
     }
 
     // getter methods
@@ -65,7 +85,7 @@ public class TitleDeeds {
         return propertyPerColorGroup;
     }
 
-    public int[] getHousePerPropertyPerColorGroup() {
+    public Map<ColorGroup, SortedSet<Integer>> getHousePerPropertyPerColorGroup() {
         return housePerPropertyPerColorGroup;
     }
 

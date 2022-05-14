@@ -30,13 +30,13 @@ public final class Property extends PurchasableSpace {
             return false;
         }
 
-        if (numOfHouses == 4) {
+        if (!deeds.canBuildEvenly(this)) {
             return false;
         }
 
-        /**
-         * Make sure that the buildings are built evenly
-         */
+        if (numOfHouses == 4) {
+            return false;
+        }
 
         return true;
     }
@@ -63,11 +63,7 @@ public final class Property extends PurchasableSpace {
             return false;
         }
 
-        /**
-         * Make sure that the buildings are built evenly
-         */
-
-        return true;
+        return deeds.canBuildEvenly(this);
     }
 
     public void buyHotel() {
