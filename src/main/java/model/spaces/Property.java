@@ -86,6 +86,10 @@ public final class Property extends PurchasableSpace {
 
     @Override
     public int getRent() {
+        if (numOfHouses == 0 && deeds.hasCompleteColorGroup(colorGroup)) {
+            return rents[numOfHouses] * 2;
+        }
+
         if (hasHotel) {
             return rents[-1];
         }
