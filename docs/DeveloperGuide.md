@@ -136,3 +136,18 @@ If the player has mortgaged property, the player also turn this property over to
 Should the player owe the Bank, instead of another player, because of taxes or penalties, the player must turn over all assets to the Bank. In this case, the Bank immediately sells by auction all properties of the bankrupted player (except buildings). 
 
 A bankrupt player must immediately retire from the game. The last player left in the game after all others become bankrupt wins the game.
+
+## Implementation
+### Properties (Purchasable Space)
+Collecting rents and building houses requires the knowledge of the other properties (i.e. Utility has different multiplier for the rents depending on the number of utilities the player owns)
+
+### Design Consideration
+Alternative 1: Properties keep a list of properties of the same type (i.e. same color group, utility, station).
+    Pro: Small overhead, only need to keep track of at most 4 properties
+    Con: Creating the object for a property is very tedious
+Alternative 2 (current implementation) : Properties keep a list of properties of the owner owns.
+    Pro: Can just use the container that the owner already have
+         Easier implementation
+    Con: Large overhead, need to keep track of all the properties of the owner
+
+
