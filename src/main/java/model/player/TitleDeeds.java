@@ -1,5 +1,6 @@
 package model.player;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +35,19 @@ public class TitleDeeds {
             initialiseHouseCount(group);
         }
         deeds.add(newDeed);
+    }
+
+    public void removeDeed(PurchasableSpace toRemoveDeed) {
+        if (toRemoveDeed instanceof Utility) {
+            numOfUtilities--;
+            deeds.remove(toRemoveDeed);
+        } else if (toRemoveDeed instanceof Station) {
+            numOfStations--;
+            deeds.remove(toRemoveDeed);
+        } else {
+            Property deed = (Property) toRemoveDeed;
+            removeProperty(deed);
+        }
     }
 
     public void buyBuilding(Property propertyToBuyHouse) {
@@ -107,6 +121,13 @@ public class TitleDeeds {
         propertyPerColorGroup.replace(group, numOfProperties + 1);
     }
 
+    private void decrementPropertyCount(ColorGroup group) {
+        assert propertyPerColorGroup.containsKey(group);
+
+        int numOfProperties = propertyPerColorGroup.get(group);
+        propertyPerColorGroup.replace(group, numOfProperties - 1);
+    }
+
     private void initialiseHouseCount(ColorGroup group) {
         LinkedList<Integer> houses = new LinkedList<>(Arrays.asList(0, 0, 0));
         if (group == ColorGroup.PURPLE || group == ColorGroup.BLUE) {
@@ -130,6 +151,26 @@ public class TitleDeeds {
         LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
         int numOfHouses = houses.removeLast();
         houses.addFirst(numOfHouses - 1);
+    }
+
+    private void removeProperty(Property propertyToRemove) {
+        ColorGroup group = propertyToRemove.getColorGroup();
+        if (canRemoveProperty(propertyToRemove)) {
+            decrementPropertyCount(group);
+            housePerPropertyPerColorGroup.remove(group);
+        }
+    }
+
+    private boolean canRemoveProperty(Property propertyToRemove) {
+        ColorGroup group = propertyToRemove.getColorGroup();
+        LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
+        for (int house : houses) {
+            if (house != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // getter methods
