@@ -1,10 +1,13 @@
 package model.player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import commons.ColorGroup;
 import model.spaces.Property;
@@ -19,7 +22,7 @@ public class TitleDeeds {
     private int numOfStations = 0;
     private int numOfUtilities = 0;
     private Map<ColorGroup, Integer> propertyPerColorGroup = new HashMap<>();
-    private Map<ColorGroup, SortedSet<Integer>> housePerPropertyPerColorGroup = new HashMap<>();
+    private Map<ColorGroup, LinkedList<Integer>> housePerPropertyPerColorGroup = new HashMap<>();
 
     public void addDeed(PurchasableSpace newDeed) {
         if (newDeed instanceof Utility) {
@@ -29,13 +32,28 @@ public class TitleDeeds {
         } else {
             Property deed = (Property) newDeed;
             ColorGroup group = deed.getColorGroup();
-            int numOfProperty = 0;
-            if (propertyPerColorGroup.containsKey(group)) {
-                numOfProperty = propertyPerColorGroup.get(group);
-            }
-            propertyPerColorGroup.replace(group, numOfProperty + 1);
+            incrementPropertyCount(group);
+            initialiseHouseCount(group);
         }
         deeds.add(newDeed);
+    }
+
+    private void incrementPropertyCount(ColorGroup group) {
+        int numOfProperty = 0;
+        if (propertyPerColorGroup.containsKey(group)) {
+            numOfProperty = propertyPerColorGroup.get(group);
+        }
+
+        propertyPerColorGroup.replace(group, numOfProperty + 1);
+    }
+
+    private void initialiseHouseCount(ColorGroup group) {
+        LinkedList<Integer> houses = new LinkedList<>(Arrays.asList(0, 0, 0));
+        if (group == ColorGroup.PURPLE || group == ColorGroup.BLUE) {
+            houses.removeLast();
+        }
+
+        housePerPropertyPerColorGroup.put(group, houses);
     }
 
     public boolean hasCompleteColorGroup(ColorGroup group) {
@@ -50,18 +68,68 @@ public class TitleDeeds {
         return numOfProperties == 3;
     }
 
+    public void buyHouse(Property propertyToBuyHouse) {
+        if (!canBuildEvenly(propertyToBuyHouse)) {
+            return;
+        }
+
+        incrementHouseCount(propertyToBuyHouse.getColorGroup());
+        propertyToBuyHouse.boughtHouse();
+    }
+
+    private void incrementHouseCount(ColorGroup group) {
+        assert housePerPropertyPerColorGroup.containsKey(group);
+
+        LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
+        int numOfHouse = houses.removeFirst();
+        houses.addLast(numOfHouse + 1);
+    }
     public boolean canBuildEvenly(Property propertyToBuyHouse) {
         ColorGroup group = propertyToBuyHouse.getColorGroup();
         if (!hasCompleteColorGroup(group)) {
             return false;
         }
 
-        SortedSet<Integer> housesSet = housePerPropertyPerColorGroup.get(group);
+        SortedSet<Integer> housesSet = new TreeSet<>(housePerPropertyPerColorGroup.get(group));
         assert housesSet.size() <= 2;
 
         if (housesSet.size() == 2) {
             int numOfHouses = propertyToBuyHouse.getNumOfHouses();
             return housesSet.first() == numOfHouses;
+        }
+
+        return true;
+    }
+
+    public void sellHouse(Property propertyToSellHouse) {
+        if (!canRemoveEvenly(propertyToSellHouse)) {
+            return;
+        }
+
+        decrementHouseCount(propertyToSellHouse.getColorGroup());
+        propertyToSellHouse.soldHouse();
+    }
+
+    private void decrementHouseCount(ColorGroup group) {
+        assert housePerPropertyPerColorGroup.containsKey(group);
+
+        LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
+        int numOfHouse = houses.removeLast();
+        houses.addFirst(numOfHouse - 1);
+    }
+
+    public boolean canRemoveEvenly(Property propertyToSellHouse) {
+        ColorGroup group = propertyToSellHouse.getColorGroup();
+        if (!hasCompleteColorGroup(group)) {
+            return false;
+        }
+
+        SortedSet<Integer> housesSet = new TreeSet<>(housePerPropertyPerColorGroup.get(group));
+        assert housesSet.size() <= 2;
+
+        if (housesSet.size() == 2) {
+            int numOfHouses = propertyToSellHouse.getNumOfHouses();
+            return housesSet.last() == numOfHouses;
         }
 
         return true;
@@ -85,7 +153,7 @@ public class TitleDeeds {
         return propertyPerColorGroup;
     }
 
-    public Map<ColorGroup, SortedSet<Integer>> getHousePerPropertyPerColorGroup() {
+    public Map<ColorGroup, LinkedList<Integer>> getHousePerPropertyPerColorGroup() {
         return housePerPropertyPerColorGroup;
     }
 

@@ -26,11 +26,11 @@ public final class Property extends PurchasableSpace {
     public boolean canBuyHouse() {
         assert MAX_NUM_OF_HOUSE <= 32;
 
-        if (MAX_NUM_OF_HOUSE <= 0) {
+        if (hasHotel) {
             return false;
         }
 
-        if (!deeds.canBuildEvenly(this)) {
+        if (MAX_NUM_OF_HOUSE <= 0) {
             return false;
         }
 
@@ -41,29 +41,32 @@ public final class Property extends PurchasableSpace {
         return true;
     }
 
-    public void buyHouse() {
+    public void boughtHouse() {
         if (canBuyHouse()) {
             numOfHouses += 1;
             MAX_NUM_OF_HOUSE -= 1;
         }
     }
 
-    public void sellHouse() {
-        numOfHouses -= 1;
+    public boolean canSellHouse() {
+        assert MAX_NUM_OF_HOUSE <= 32;
 
-        /**
-         * Need to make sure that the buildings are sold evenly
-         */
-
-        MAX_NUM_OF_HOUSE += 1;
-    }
-
-    public boolean canBuyHotel() {
-        if (numOfHouses < 4) {
+        if (hasHotel) {
             return false;
         }
 
-        return deeds.canBuildEvenly(this);
+        if (numOfHouses <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void soldHouse() {
+        if (canSellHouse()) {
+            numOfHouses -= 1;
+            MAX_NUM_OF_HOUSE += 1;
+        }
     }
 
     public void buyHotel() {
@@ -74,10 +77,30 @@ public final class Property extends PurchasableSpace {
         }
     }
 
+    private boolean canBuyHotel() {
+        if (hasHotel) {
+            return false;
+        }
+
+        if (numOfHouses < 4) {
+            return false;
+        }
+
+        return MAX_NUM_OF_HOTEL > 0;
+    }
+
     public void sellHotel() {
-        numOfHouses = 4;
-        MAX_NUM_OF_HOUSE -= 4;
-        MAX_NUM_OF_HOTEL += 1;
+        if (canSellHotel()) {
+            numOfHouses = 4;
+            MAX_NUM_OF_HOUSE -= 4;
+            MAX_NUM_OF_HOTEL += 1;
+        }
+    }
+
+    private boolean canSellHotel() {
+        assert numOfHouses <= 4;
+
+        return hasHotel;
     }
 
     @Override
