@@ -1,2 +1,4 @@
 # monopoly-java
-This project is a re-creation of the popular board game using Java. I am planning to use an OOP approach to creating this game. The eventual plan of this project is to add an online feature so that I can play a game with my friends.
+This project is a re-creation of the popular board game, Monopoly. The rules of Monopoly have always been fascinating to me as they were all different depending on whom I played with.  These rules are widely known as "house rules". I decided to re-create Monopoly as I want to find out the rules the inventors of the game implemented. At the same time, see what kind of challenges might arise when creating an adequately complex game on the computer.
+
+The end product will be a functioning Monopoly game that can be played alone with some simple AIs. And hopefully it will include online feature so that I can also play the game with my friends.
