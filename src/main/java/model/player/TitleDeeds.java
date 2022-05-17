@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import commons.ColorGroup;
 import model.spaces.Property;
@@ -77,7 +75,7 @@ public class TitleDeeds {
         if (propertyToBuyHouse.canBuyHotel()) {
             propertyToBuyHouse.buyHotel();
         } else {
-            propertyToBuyHouse.boughtHouse();
+            propertyToBuyHouse.buyHouse();
         }
     }
 
@@ -108,9 +106,9 @@ public class TitleDeeds {
 
         decrementHouseCount(propertyToSellHouse.getColorGroup());
         if (propertyToSellHouse.canSellHotel()) {
-            propertyToSellHouse.canSellHotel();
+            propertyToSellHouse.sellHotel();
         } else {
-            propertyToSellHouse.soldHouse();
+            propertyToSellHouse.sellHouse();
         }
     }
 
@@ -128,15 +126,10 @@ public class TitleDeeds {
             return false;
         }
 
-        SortedSet<Integer> housesSet = new TreeSet<>(housePerPropertyPerColorGroup.get(group));
-        assert housesSet.size() <= 2;
+        LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
+        int numOfHouses = propertyToSellHouse.getNumOfHouses();
 
-        if (housesSet.size() == 2) {
-            int numOfHouses = propertyToSellHouse.getNumOfHouses();
-            return housesSet.last() == numOfHouses;
-        }
-
-        return true;
+        return houses.peekLast() == numOfHouses;
     }
 
     // getter methods
