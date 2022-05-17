@@ -23,6 +23,54 @@ public final class Property extends PurchasableSpace {
         this.rents = rents;
     }
 
+    public void buyHouse() {
+        if (canBuyHouse()) {
+            numOfHouses += 1;
+            MAX_NUM_OF_HOUSE -= 1;
+        }
+    }
+
+    public void buyHotel() {
+        if (canBuyHotel()) {
+            numOfHouses = 0;
+            MAX_NUM_OF_HOUSE += 4;
+            MAX_NUM_OF_HOTEL -= 1;
+        }
+    }
+
+    public void sellHouse() {
+        if (canSellHouse()) {
+            numOfHouses -= 1;
+            MAX_NUM_OF_HOUSE += 1;
+        }
+    }
+
+    public void sellHotel() {
+        if (canSellHotel()) {
+            numOfHouses = 4;
+            MAX_NUM_OF_HOUSE -= 4;
+            MAX_NUM_OF_HOTEL += 1;
+        }
+    }
+
+    public boolean canBuyHotel() {
+        if (hasHotel) {
+            return false;
+        }
+
+        if (numOfHouses < 4) {
+            return false;
+        }
+
+        return numOfHouses == 4 && MAX_NUM_OF_HOTEL > 0;
+    }
+
+    public boolean canSellHotel() {
+        assert numOfHouses == 0;
+
+        return hasHotel;
+    }
+
     private boolean canBuyHouse() {
         assert MAX_NUM_OF_HOUSE <= 32;
 
@@ -41,14 +89,7 @@ public final class Property extends PurchasableSpace {
         return true;
     }
 
-    public void boughtHouse() {
-        if (canBuyHouse()) {
-            numOfHouses += 1;
-            MAX_NUM_OF_HOUSE -= 1;
-        }
-    }
-
-    public boolean canSellHouse() {
+    private boolean canSellHouse() {
         assert MAX_NUM_OF_HOUSE <= 32;
 
         if (hasHotel) {
@@ -60,47 +101,6 @@ public final class Property extends PurchasableSpace {
         }
 
         return true;
-    }
-
-    public void soldHouse() {
-        if (canSellHouse()) {
-            numOfHouses -= 1;
-            MAX_NUM_OF_HOUSE += 1;
-        }
-    }
-
-    public void buyHotel() {
-        if (canBuyHotel()) {
-            numOfHouses = 0;
-            MAX_NUM_OF_HOUSE += 4;
-            MAX_NUM_OF_HOTEL -= 1;
-        }
-    }
-
-    public boolean canBuyHotel() {
-        if (hasHotel) {
-            return false;
-        }
-
-        if (numOfHouses < 4) {
-            return false;
-        }
-
-        return numOfHouses == 4 && MAX_NUM_OF_HOTEL > 0;
-    }
-
-    public void sellHotel() {
-        if (canSellHotel()) {
-            numOfHouses = 4;
-            MAX_NUM_OF_HOUSE -= 4;
-            MAX_NUM_OF_HOTEL += 1;
-        }
-    }
-
-    public boolean canSellHotel() {
-        assert numOfHouses == 0;
-
-        return hasHotel;
     }
 
     @Override
