@@ -39,12 +39,12 @@ public class TitleDeeds {
     }
 
     private void incrementPropertyCount(ColorGroup group) {
-        int numOfProperty = 0;
+        int numOfProperties = 0;
         if (propertyPerColorGroup.containsKey(group)) {
-            numOfProperty = propertyPerColorGroup.get(group);
+            numOfProperties = propertyPerColorGroup.get(group);
         }
 
-        propertyPerColorGroup.replace(group, numOfProperty + 1);
+        propertyPerColorGroup.replace(group, numOfProperties + 1);
     }
 
     private void initialiseHouseCount(ColorGroup group) {
@@ -68,54 +68,58 @@ public class TitleDeeds {
         return numOfProperties == 3;
     }
 
-    public void buyHouse(Property propertyToBuyHouse) {
+    public void buyBuilding(Property propertyToBuyHouse) {
         if (!canBuildEvenly(propertyToBuyHouse)) {
             return;
         }
 
         incrementHouseCount(propertyToBuyHouse.getColorGroup());
-        propertyToBuyHouse.boughtHouse();
+        if (propertyToBuyHouse.canBuyHotel()) {
+            propertyToBuyHouse.buyHotel();
+        } else {
+            propertyToBuyHouse.boughtHouse();
+        }
     }
 
     private void incrementHouseCount(ColorGroup group) {
         assert housePerPropertyPerColorGroup.containsKey(group);
 
         LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
-        int numOfHouse = houses.removeFirst();
-        houses.addLast(numOfHouse + 1);
+        int numOfHouses = houses.removeFirst();
+        houses.addLast(numOfHouses + 1);
     }
+
     public boolean canBuildEvenly(Property propertyToBuyHouse) {
         ColorGroup group = propertyToBuyHouse.getColorGroup();
         if (!hasCompleteColorGroup(group)) {
             return false;
         }
 
-        SortedSet<Integer> housesSet = new TreeSet<>(housePerPropertyPerColorGroup.get(group));
-        assert housesSet.size() <= 2;
+        LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
+        int numOfHouses = propertyToBuyHouse.getNumOfHouses();
 
-        if (housesSet.size() == 2) {
-            int numOfHouses = propertyToBuyHouse.getNumOfHouses();
-            return housesSet.first() == numOfHouses;
-        }
-
-        return true;
+        return houses.peekFirst() == numOfHouses;
     }
 
-    public void sellHouse(Property propertyToSellHouse) {
+    public void sellBuilding(Property propertyToSellHouse) {
         if (!canRemoveEvenly(propertyToSellHouse)) {
             return;
         }
 
         decrementHouseCount(propertyToSellHouse.getColorGroup());
-        propertyToSellHouse.soldHouse();
+        if (propertyToSellHouse.canSellHotel()) {
+            propertyToSellHouse.canSellHotel();
+        } else {
+            propertyToSellHouse.soldHouse();
+        }
     }
 
     private void decrementHouseCount(ColorGroup group) {
         assert housePerPropertyPerColorGroup.containsKey(group);
 
         LinkedList<Integer> houses = housePerPropertyPerColorGroup.get(group);
-        int numOfHouse = houses.removeLast();
-        houses.addFirst(numOfHouse - 1);
+        int numOfHouses = houses.removeLast();
+        houses.addFirst(numOfHouses - 1);
     }
 
     public boolean canRemoveEvenly(Property propertyToSellHouse) {

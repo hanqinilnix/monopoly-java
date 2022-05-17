@@ -23,7 +23,7 @@ public final class Property extends PurchasableSpace {
         this.rents = rents;
     }
 
-    public boolean canBuyHouse() {
+    private boolean canBuyHouse() {
         assert MAX_NUM_OF_HOUSE <= 32;
 
         if (hasHotel) {
@@ -77,7 +77,7 @@ public final class Property extends PurchasableSpace {
         }
     }
 
-    private boolean canBuyHotel() {
+    public boolean canBuyHotel() {
         if (hasHotel) {
             return false;
         }
@@ -86,7 +86,7 @@ public final class Property extends PurchasableSpace {
             return false;
         }
 
-        return MAX_NUM_OF_HOTEL > 0;
+        return numOfHouses == 4 && MAX_NUM_OF_HOTEL > 0;
     }
 
     public void sellHotel() {
@@ -97,8 +97,8 @@ public final class Property extends PurchasableSpace {
         }
     }
 
-    private boolean canSellHotel() {
-        assert numOfHouses <= 4;
+    public boolean canSellHotel() {
+        assert numOfHouses == 0;
 
         return hasHotel;
     }
