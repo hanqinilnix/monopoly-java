@@ -1,9 +1,7 @@
 package model.spaces;
 
-public abstract class ActionSpace extends Space {
-    protected ActionSpace(String name) {
-        super(name);
+public class ActionSpace extends Space {
+    public ActionSpace(String name, int position) {
+        super(name, position);
     }
-
-    public abstract void action();
 }

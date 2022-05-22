@@ -22,6 +22,9 @@ public class TitleDeeds {
     private Map<ColorGroup, Integer> propertyPerColorGroup = new HashMap<>();
     private Map<ColorGroup, LinkedList<Integer>> housePerPropertyPerColorGroup = new HashMap<>();
 
+    private int totalOwnedHouses = 0;
+    private int totalOwnedHotels = 0;
+
     public void addDeed(PurchasableSpace newDeed) {
         if (newDeed instanceof Utility) {
             numOfUtilities++;
@@ -192,6 +195,14 @@ public class TitleDeeds {
 
     public Map<ColorGroup, LinkedList<Integer>> getHousePerPropertyPerColorGroup() {
         return housePerPropertyPerColorGroup;
+    }
+
+    public int getTotalOwnedHouses() {
+        return totalOwnedHouses;
+    }
+
+    public int getTotalOwnedHotels() {
+        return totalOwnedHotels;
     }
 
 }

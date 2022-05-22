@@ -16,8 +16,8 @@ public final class Property extends PurchasableSpace {
     private int numOfHouses = 0;
     private boolean hasHotel = false;
 
-    public Property(String name, int price, ColorGroup colorGroup, int housePrice, int[] rents) {
-        super(name, price);
+    public Property(String name, int position, int price, ColorGroup colorGroup, int housePrice, int[] rents) {
+        super(name, position, price);
         this.colorGroup = colorGroup;
         this.housePrice = housePrice;
         this.rents = rents;

@@ -10,8 +10,8 @@ public abstract class PurchasableSpace extends Space {
     protected TitleDeeds deeds;
     private boolean isMortgaged = false;
 
-    protected PurchasableSpace(String name, int price) {
-        super(name);
+    protected PurchasableSpace(String name, int position, int price) {
+        super(name, position);
         this.price = price;
     }
 

@@ -3,8 +3,8 @@ package model.spaces;
 import commons.Dice;
 
 public final class Utility extends PurchasableSpace {
-    public Utility(String name, int price) {
-        super(name, price);
+    public Utility(String name, int position, int price) {
+        super(name, position, price);
     }
 
     @Override

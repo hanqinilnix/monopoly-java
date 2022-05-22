@@ -1,11 +1,11 @@
 package model.spaces;
 
-public final class Station extends PurchasableSpace{
+public final class Station extends PurchasableSpace {
 
     private final int startingRentPrice = 25;
 
-    protected Station(String name, int price) {
-        super(name, price);
+    public Station(String name, int position, int price) {
+        super(name, position, price);
     }
 
     @Override
