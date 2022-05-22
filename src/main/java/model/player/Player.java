@@ -30,6 +30,14 @@ public class Player {
         wallet.takeMoney(price);
     }
 
+    public void receiveMoney(int money) {
+        wallet.receiveMoney(money);
+    }
+
+    public void giveMoney(int money) {
+        wallet.takeMoney(money);
+    }
+
     public boolean canPay(int money) {
         return wallet.getMoney() >= money;
     }
