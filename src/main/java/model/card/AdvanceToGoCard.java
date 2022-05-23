@@ -2,16 +2,13 @@ package model.card;
 
 import model.player.Player;
 
-public class GetOutOfJailCard extends Card {
-    public GetOutOfJailCard(String description) {
+public class AdvanceToGoCard extends Card{
+    public AdvanceToGoCard(String description) {
         super(description);
     }
 
     @Override
     public void whenDrawn(Player player) {
-    }
 
-    public boolean use() {
-        return true;
     }
 }

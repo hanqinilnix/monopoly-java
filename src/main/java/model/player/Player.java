@@ -1,5 +1,8 @@
 package model.player;
 
+import java.util.ArrayList;
+
+import model.card.Card;
 import model.spaces.PurchasableSpace;
 
 public class Player {
@@ -7,7 +10,8 @@ public class Player {
     private Wallet wallet = new Wallet();
 
     private TitleDeeds titleDeeds = new TitleDeeds();
-    private int numOfGofj = 0; // Gofj = Get out of jail
+    private ArrayList<Card> getOutOfJailList = new ArrayList<>();
+    private int turnsInJail = 0;
 
     /**
      * This method is for property that is bought directly when player lands on the space.
@@ -23,7 +27,7 @@ public class Player {
      * This method is for property that is bought through auction.
      *
      * @param propertyBought property to be bought by the player
-     * @param price price at which the player bought the property at
+     * @param price          price at which the player bought the property at
      */
     public void buy(PurchasableSpace propertyBought, int price) {
         titleDeeds.addDeed(propertyBought);
@@ -42,6 +46,23 @@ public class Player {
         return wallet.getMoney() >= money;
     }
 
+    public void goToJail() {
+        turnsInJail = 3;
+    }
+
+    public void outOfJail() {
+        turnsInJail = 0;
+    }
+
+    public void decrementJailTime() {
+        turnsInJail--;
+        assert turnsInJail >= 0;
+    }
+
+    public boolean isInJail() {
+        return turnsInJail > 0;
+    }
+
     // getter methods
 
     public int getId() {
@@ -56,8 +77,12 @@ public class Player {
         return titleDeeds;
     }
 
-    public int getNumOfGofj() {
-        return numOfGofj;
+    public ArrayList<Card> getGetOutOfJailList() {
+        return getOutOfJailList;
+    }
+
+    public int getTurnsInJail() {
+        return turnsInJail;
     }
 
     @Override

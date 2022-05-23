@@ -2,10 +2,10 @@ package model.card;
 
 import model.player.Player;
 
-public class PayPlayersCard extends Card {
+public class PayAllPlayersCard extends Card {
     private int amountToPay;
 
-    public PayPlayersCard(String description, int amountToPay) {
+    public PayAllPlayersCard(String description, int amountToPay) {
         super(description);
         this.amountToPay = amountToPay;
     }
