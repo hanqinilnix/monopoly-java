@@ -87,11 +87,20 @@ public class Player {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
         if (!(obj instanceof Player)) {
             return false;
         }
 
         Player player = (Player) obj;
+
         return player.id == id;
     }
 

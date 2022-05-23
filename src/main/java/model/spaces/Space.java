@@ -18,4 +18,24 @@ public abstract class Space {
     public int getPosition() {
         return position;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Space)) {
+            return false;
+        }
+
+        Space newObj = (Space) obj;
+
+        return name.equals(newObj.name)
+                && position == newObj.position;
+    }
 }

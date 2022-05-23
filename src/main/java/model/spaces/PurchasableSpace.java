@@ -54,4 +54,27 @@ public abstract class PurchasableSpace extends Space {
     public boolean getIsMortgaged() {
         return isMortgaged;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof PurchasableSpace)) {
+            return false;
+        }
+
+        if (!super.equals(obj)) {
+            return false;
+        }
+
+        PurchasableSpace newObj = (PurchasableSpace) obj;
+        return price == newObj.price
+                && owner.equals(newObj.owner);
+    }
 }

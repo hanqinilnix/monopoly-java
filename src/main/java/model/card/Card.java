@@ -14,4 +14,19 @@ public abstract class Card {
     public String getCardDescription() {
         return cardDescription;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Card)) {
+            return false;
+        }
+
+        Card newObj = (Card) obj;
+
+        return cardDescription.equals(newObj.cardDescription);
+    }
 }

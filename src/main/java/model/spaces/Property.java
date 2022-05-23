@@ -133,4 +133,28 @@ public final class Property extends PurchasableSpace {
     public boolean getHasHotel() {
         return hasHotel;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Property)) {
+            return false;
+        }
+
+        if (!super.equals(obj)) {
+            return false;
+        }
+
+        Property newObj = (Property) obj;
+        return colorGroup == newObj.colorGroup
+                && housePrice == newObj.housePrice
+                && rents.equals(newObj.rents);
+    }
 }
